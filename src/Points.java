@@ -24,12 +24,13 @@ import java.util.ArrayList;
 
 
 public class Points {
-	PApplet parent;
+
+	private PApplet parent;
 	private ArrayList<Point> points;
 
-	public Points(PApplet p) {
+	public Points(PApplet parent) {
 		this.points = new ArrayList<Point>();
-		this.parent = p;
+		this.parent = parent;
 	}
 
 	public void drawPoints() {
