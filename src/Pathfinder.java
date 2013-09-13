@@ -1,5 +1,5 @@
-/**
- * <one line to give the program's name and a brief idea of what it does.>
+/*
+ * Pathfinder
  * Copyright (C) 2013  Tayler Mulligan
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,13 +19,6 @@
 import processing.core.PApplet;
 import processing.core.PApplet.*;
 
-public class Pathfinder {
-
-	PApplet parent;
-
-	public Pathfinder(PApplet parent) {
-		this.parent = parent;
-	}
-
-	//TODO implement path-finding
+public class Pathfinder extends PApplet {
+	//TODO implement path-finding, as well as drawing points and the path
 }

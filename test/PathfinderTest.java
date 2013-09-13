@@ -16,9 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import processing.core.PApplet;
-import processing.core.PApplet.*;
+import org.junit.After;
+import org.junit.Before;
 
-public class Points {
-	//TODO implement representation of an array of points
+public class PathfinderTest {
+	@Before
+	public void setUp() throws Exception {
+
+	}
+
+	@After
+	public void tearDown() throws Exception {
+
+	}
 }
