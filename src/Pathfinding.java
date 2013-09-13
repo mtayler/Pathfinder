@@ -18,6 +18,7 @@
 import processing.core.PApplet;
 import processing.core.PApplet.*;
 
+import java.awt.*;
 import java.util.Random;
 
 public class Pathfinding extends PApplet{
@@ -25,14 +26,17 @@ public class Pathfinding extends PApplet{
 	Points points;
 	Pathfinder pathfinder;
 
+	public boolean foundEnd;
+
     public void setup() {
-        size(600,600);
+        size(400,400);
         background(0);
 	    this.points = new Points(this);
+	    this.pathfinder = new Pathfinder(this, this.points, new Point(0,0), new Point(width,height));
 
 	    Random rand = new Random();
 
-	    for (int i=0; i < ((height+width)/4); i++) {
+	    for (int i=0; i < ((height+width)/6); i++) {
 		    points.addPoint(rand.nextInt(width), rand.nextInt(height));
 		    points.addPoint(rand.nextInt(width), rand.nextInt(height));
 	    }
@@ -40,14 +44,33 @@ public class Pathfinding extends PApplet{
 
 	public void draw() {
 		this.drawPoints();
+		this.drawEnd();
 
+		if (this.foundEnd == true) { return; }
 
+		try {
+			if (pathfinder.nextPoint()) {
+				this.foundEnd = true;
+			}
+		}
+		catch(InvalidPointsException e) {
+			System.err.print("Adding point at (0,0)");
+			points.addPoint(0,0);
+		}
+		pathfinder.drawPath();
 	}
 
 	private void drawPoints() {
-		stroke(200);
+		stroke(210);
 		strokeWeight(2);
 		fill(0);
-		this.points.drawPoints(5);
+		this.points.drawPoints(10);
+	}
+
+	private void drawEnd() {
+		stroke(210);
+		strokeWeight(2);
+		fill(200,0,0);
+		pathfinder.drawEnd();
 	}
 }

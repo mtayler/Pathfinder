@@ -27,18 +27,11 @@ public class Points {
 
 	private PApplet parent;
 	private ArrayList<Point> points;
+	private ArrayList<Point> ends;
 
 	public Points(PApplet parent) {
 		this.points = new ArrayList<Point>();
 		this.parent = parent;
-	}
-
-	public void drawPoints() {
-		parent.ellipseMode(parent.CENTER);
-		for (int currentPoint=0; currentPoint < points.size(); currentPoint++) {
-			Point point = points.get(currentPoint);
-			parent.ellipse((float)point.getX(), (float)point.getY(), 1, 1);
-		}
 	}
 
 	public void drawPoints(int size) {
@@ -49,16 +42,17 @@ public class Points {
 		}
 	}
 
+
 	public void addPoint(int x, int y) {
 		Point point = new Point(x,y);
 		this.points.add(point);
 	}
-
-	public Point getPoint(int index) {
-		return points.get(index);
+	public void addPoint(Point point) {
+		this.points.add(point);
 	}
 
-	public int getLength() {
-		return this.points.size();
+
+	public ArrayList<Point> getPoints() {
+		return points;
 	}
 }
