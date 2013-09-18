@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-//TODO implement path-finding, as well as drawing points and the path
-=======
 /*
  * Pathfinder
  * Copyright (C) 2013  Tayler Mulligan
@@ -22,7 +19,7 @@
 import com.sun.org.apache.xpath.internal.functions.FuncFalse;
 import processing.core.PApplet;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class Pathfinder {
@@ -142,4 +139,3 @@ public class Pathfinder {
         this.maxDistance = distance;
 	}
 }
->>>>>>> prototype

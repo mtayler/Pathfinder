@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-//TODO implement representation of an array of points
-=======
 /*
  * Pathfinder
  * Copyright (C) 2013  Tayler Mulligan
@@ -21,7 +18,7 @@
 
 import processing.core.PApplet;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.ArrayList;
 
 
@@ -92,4 +89,3 @@ public class Points {
         return this.start;
     }
 }
->>>>>>> prototype
