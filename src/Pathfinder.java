@@ -1,5 +1,5 @@
-/**
- * <one line to give the program's name and a brief idea of what it does.>
+/*
+ * Pathfinder
  * Copyright (C) 2013  Tayler Mulligan
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,13 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.sun.org.apache.xpath.internal.functions.FuncFalse;
 import processing.core.PApplet;
 
 import java.awt.*;
 import java.util.ArrayList;
-
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 public class Pathfinder {
 
@@ -32,23 +30,19 @@ public class Pathfinder {
 	private ArrayList<Point> path;
 
 	private Point currentPoint;
-	private Point end;
 
-	private double maxDistance = 50;
-	private boolean found = true;
+	private double maxDistance = 40;
+    private ArrayList<Point> invalidPoints;
 
-	public Pathfinder(PApplet parent, Points points, Point start, Point end) {
+    public Pathfinder(PApplet parent, Points points) {
 		this.path = new ArrayList<Point>();
+        this.invalidPoints = new ArrayList<Point>();
 
 		this.parent = parent;
 		this.points = points;
 
-		this.currentPoint = start;
-		this.points.addPoint(start);
-		this.path.add(start);
-
-		this.end = end;
-		this.points.addPoint(end);
+        this.currentPoint = points.getStart();
+        this.path.add(this.currentPoint);
 	}
 
 	public boolean nextPoint() throws InvalidPointsException {
@@ -57,72 +51,91 @@ public class Pathfinder {
 			throw new InvalidPointsException("Requires 2 or more points added.");
 		}
 
-		Point startPoint = this.currentPoint;
-		for (int index=0; index < points.size()-1; index++) {
-			this.checkPoint(points.get(index));
-		}
+        for (int index=0; index < points.size()-1; index++) {
+            Point possiblePoint = points.get(index);
+            if (possiblePoint.equals(this.currentPoint)) { continue; }
+            if (closer(possiblePoint)) {
+                this.currentPoint = possiblePoint;
+                this.path.add(this.currentPoint);
+                return true;
+            }
+            this.invalidPoints.add(currentPoint);
+        }
 
-		if (this.currentPoint == startPoint) {
-			this.found = false;
-		}
-		else {
-			this.found = true;
-		}
-
-		if (this.end.equals(this.currentPoint)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+        for (int index=0; index < points.size()-1; index++) {
+            Point possiblePoint = points.get(index);
+            if (possiblePoint.equals(this.currentPoint)) { continue; }
+            if (valid(possiblePoint)) {
+                this.currentPoint = possiblePoint;
+                this.path.add(this.currentPoint);
+                return false;
+            }
+        }
+        this.invalidPoints.clear();
+        return false;
 	}
 
-	private void checkPoint(Point possiblePoint) {
-		if (withinDistance(this.currentPoint, possiblePoint)) {
-			if (this.found) {
-				if (getDistance(possiblePoint, this.end) < getDistance(this.currentPoint, this.end)) {
-					this.path.add(possiblePoint);
-					this.currentPoint = possiblePoint;
-				}
-			}
-			else {
-				this.path.add(possiblePoint);
-				this.currentPoint = possiblePoint;
-			}
-		}
+    private boolean valid(Point point) {
+        if (this.invalidPoints.contains(point)) {
+            return false;
+        }
+        if (withinDistance(this.currentPoint, point)) {
+//            if (!this.path.contains(point)) {
+//                this.invalidPoints.clear();
+//            }
+            return true;
+        }
+        return false;
+    }
+
+	private boolean closer(Point point) {
+        if ((getDistance(point, this.points.getEnd()) < (getDistance(this.currentPoint, this.points.getEnd())))) {
+            if (!this.path.contains(point)) {
+                if (valid(point)) {
+                    return true;
+                }
+            }
+        }
+        return false;
 	}
 
 	public void drawPath() {
 		Point pointA;
 		Point pointB;
+        parent.strokeWeight(5);
+        parent.stroke(255,200);
 		for (int point=0; point < path.size()-1; point++) {
-			parent.stroke(255, 100);
 			pointA = path.get(point);
 			pointB = path.get(point+1);
 			parent.line((float)pointA.getX(), (float)pointA.getY(), (float)pointB.getX(), (float)pointB.getY());
 		}
 	}
 
+    public boolean atEnd() {
+        if (this.currentPoint.equals(this.points.getEnd())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 	private boolean withinDistance(Point point1, Point point2) {
-		return this.getDistance(point1, point2) < this.getMaxDistance();
+		return this.getDistance(point1, point2) <= this.getMaxDistance();
 	}
 
 	private double getDistance(Point point1, Point point2) {
 		double x = point2.getX() - point1.getX();
 		double y = point2.getY() - point1.getY();
 
-		return sqrt( (pow(x,2) + pow(y,2)) );
+		return Math.abs(Math.sqrt((x * x) + (y * y)));
 	}
 
-	public void setMaxDistance(double maxDistance) {
-		this.maxDistance = maxDistance;
-	}
 
-	private double getMaxDistance() {
+	public double getMaxDistance() {
 		return this.maxDistance;
 	}
-
-	public void drawEnd() {
-		parent.point((float)this.end.getX(), (float)this.end.getY());
+    public void setMaxDistance(int distance) {
+        this.maxDistance = distance;
 	}
 }
