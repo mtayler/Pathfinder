@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package controller;
+
 import processing.core.PApplet;
 
 import java.awt.Point;
@@ -25,38 +27,22 @@ import java.util.ArrayList;
 
 public class Points {
 
-	private PApplet parent;
 	private ArrayList<Point> points;
 
     private Point end;
     private Point start;
+    private int maxDistance;
 
-	public Points(PApplet parent, Point start, Point end) {
+	public Points(Point start, Point end, int maxDistance) {
 		this.points = new ArrayList<Point>();
-		this.parent = parent;
 
         this.start = start;
         this.end = end;
 
         this.addPoint(start);
         this.addPoint(end);
-	}
 
-	public void drawPoints(int size) {
-        parent.stroke(210);
-        parent.strokeWeight(2);
-        parent.fill(0);
-
-		parent.ellipseMode(parent.CENTER);
-		for (int currentPoint=0; currentPoint < points.size(); currentPoint++) {
-			Point point = points.get(currentPoint);
-			parent.ellipse((float)point.getX(), (float)point.getY(), size, size);
-		}
-        parent.fill(0, 255, 0);
-        parent.ellipse((float)this.end.getX(), (float)this.end.getY(), size, size);
-
-        parent.fill(0,0,255);
-        parent.ellipse((float)this.start.getX(), (float)this.start.getY(), size, size);
+        this.maxDistance = maxDistance;
 	}
 
 
@@ -77,9 +63,17 @@ public class Points {
         return false;
     }
 
-	public ArrayList<Point> getPoints() {
+	public ArrayList<Point> getAll() {
 		return this.points;
 	}
+
+    public Point getPoint(int index) {
+        return this.points.get(index);
+    }
+
+    public int size() {
+        return this.points.size();
+    }
 
     public Point getEnd() {
         return this.end;
@@ -87,5 +81,9 @@ public class Points {
 
     public Point getStart() {
         return this.start;
+    }
+
+    public int getMaxDistance() {
+        return this.maxDistance;
     }
 }
