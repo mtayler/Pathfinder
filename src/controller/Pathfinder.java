@@ -58,10 +58,10 @@ public class Pathfinder extends PApplet {
 
         this.path = new ArrayList<Point>();
 
-        this.currentPoint = this.start;
+        this.currentPoint = this.points.getStart();
         this.path.add(this.currentPoint);
 
-        for (int i=0; i < (height+width)/3; i++) {
+        for (int i=0; i < (height+width)/2; i++) {
             int x = Math.round(rand.nextInt(width) / 12) * 12;
             int y = Math.round(rand.nextInt(height) / 12) * 12;
 
@@ -73,7 +73,7 @@ public class Pathfinder extends PApplet {
             }
         }
 
-        this.pathfinder = new FirstAvailable(this.points);
+        this.pathfinder = new NextClosest(this.points);
     }
 
 	public void draw() {
@@ -97,6 +97,7 @@ public class Pathfinder extends PApplet {
 
         Point nextPoint = this.pathfinder.nextPoint(this.currentPoint);
         if (nextPoint == null) {
+            System.err.println("Stuck.");
             this.restart = true;
             return;
         }
@@ -107,6 +108,7 @@ public class Pathfinder extends PApplet {
         drawPath();
 
         if (nextPoint == this.points.getEnd()) {    // down here becuase it allows line to end to be drawn
+            System.out.println("Found end.");
             this.restart = true;
             return;
         }
