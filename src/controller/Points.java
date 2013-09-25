@@ -54,9 +54,18 @@ public class Points {
 		this.points.add(point);
 	}
 
-    public boolean hasPoint(int x, int y) {
-        for (int i=0; i < this.points.size(); i++) {
-            if (new Point(x,y).equals(this.points.get(i))) {
+    public boolean contains(int x, int y) {
+        for (int index=0; index < this.points.size(); index++) {
+            if (new Point(x,y).equals(this.points.get(index))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean contains(Point point) {
+        for (int index=0; index < this.points.size(); index++) {
+            if (point.equals(this.points.get(index))) {
                 return true;
             }
         }

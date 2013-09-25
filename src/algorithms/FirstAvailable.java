@@ -70,7 +70,7 @@ public class FirstAvailable extends Algorithm {
                 return possiblePoint;
             }
         }
-        if (this.invalidPoints.size() == 1 || fails > 10) {
+        if (fails > 10 && this.getDistance(this.returnedPoints.get(this.returnedPoints.size()-1), this.points.getEnd()) <= this.getDistance(currentPoint, this.points.getEnd())) {
             return null;
         }
         this.invalidPoints.clear();

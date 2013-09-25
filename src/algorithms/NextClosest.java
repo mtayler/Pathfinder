@@ -44,7 +44,6 @@ public class NextClosest extends Algorithm {
     }
 
     public Point nextPoint(Point currentPoint) {
-        this.invalidPointsCleared = false;
 
         Point closestPoint = currentPoint;
 
@@ -80,15 +79,17 @@ public class NextClosest extends Algorithm {
                 }
             }
         }
-        if (closestPoint == currentPoint && this.invalidPointsCleared == false) {
-            this.invalidPoints.clear();
-            this.invalidPointsCleared = true;
+        if (this.returnedPoints.contains(closestPoint)) {
+            this.fails++;
         }
-        else if (closestPoint == currentPoint && this.invalidPointsCleared == true) {
-//            return null;
-            System.out.println("Returned null");
-            return closestPoint;
+        else {
+            this.fails = 0;
         }
+
+        if (this.fails > 10 && this.getDistance(closestPoint, this.points.getEnd()) <= this.getDistance(currentPoint, this.points.getEnd())) {
+            return null;
+        }
+
         this.returnedPoints.add(closestPoint);
         return closestPoint;
     }

@@ -18,7 +18,6 @@
 
 package controller;
 
-import algorithms.*;
 import processing.core.PApplet;
 
 import java.awt.*;
@@ -32,56 +31,62 @@ public class Pathfinder extends PApplet {
     private int waitTime;
     private boolean restart;
 
-    private Point start;
-    private Point end;
-    private int maxDistance;
     private Point currentPoint;
+
+    private AlgorithmType selection = null;
 
     private Points points;
 
     private ArrayList<Point> path;
     private Random rand = new Random();
-    private Algorithm pathfinder;
 
+    private GUIManager guiManager;
+    private algorithms.Algorithm pathfinder;
 
     public void setup() {
-        size(400,400);
+        System.out.println("Setting up...");
+        size(500,500);
         background(0);
+
+        this.guiManager = new GUIManager(this);
+
+        reset();
+    }
+
+    public void reset() {
+        this.selection = null;
+
+        Points points;
 
         this.waitTime = 100;
         this.restart = false;
 
-        this.start = new Point(5,5);
-        this.end = new Point(width-5, height-5);
-        this.maxDistance = 30;
-        this.points = new Points(this.start, this.end, this.maxDistance);
+        Point start = new Point(5,5);
+        Point end = new Point(width-5, height-5);
+        int maxDistance = 30;
+        points = new Points(start, end, maxDistance);
 
         this.path = new ArrayList<Point>();
+        this.path.clear();
 
-        this.currentPoint = this.points.getStart();
+        this.currentPoint = points.getStart();
         this.path.add(this.currentPoint);
 
         for (int i=0; i < (height+width)/2; i++) {
             int x = Math.round(rand.nextInt(width) / 12) * 12;
             int y = Math.round(rand.nextInt(height) / 12) * 12;
 
-            if (!this.points.hasPoint(x,y)) {
-                this.points.addPoint(x,y);
+            if (!points.contains(x, y)) {
+                points.addPoint(x,y);
             }
             else {
                 i--;
             }
         }
-
-        this.pathfinder = new NextClosest(this.points);
+        this.points = points;
     }
 
 	public void draw() {
-        if (keyPressed) {
-            if (key == 'r' | key == 'R') {
-                reset();
-            }
-        }
         if (restart) {
             try {
                 sleep(500);
@@ -89,6 +94,30 @@ public class Pathfinder extends PApplet {
                 e.printStackTrace();
             }
             reset();
+        }
+
+        if (selection == null) {
+            selection = guiManager.getSelection();
+
+            if (selection != null) {
+                switch (selection) {
+                    case FIRSTAVAILABLE:    pathfinder = new algorithms.FirstAvailable(points);
+                        break;
+                    case NEXTCLOSEST:       pathfinder = new algorithms.NextClosest(points);
+                }
+            }
+            return;
+        }
+
+        if (keyPressed) {
+            if (key == 'r' | key == 'R') {
+                reset();
+            }
+            if (key == 's' | key == 'S') {
+                this.guiManager.repeat.set(false);
+                this.guiManager.clearSelection();
+                reset();
+            }
         }
 
         background(0);
@@ -101,17 +130,19 @@ public class Pathfinder extends PApplet {
             this.restart = true;
             return;
         }
+        if (!this.points.contains(nextPoint)) {
+            System.err.println("false");
+        }
         this.currentPoint = nextPoint;
         this.path.add(this.currentPoint);
 
-        drawPoints();
-        drawPath();
-
-        if (nextPoint == this.points.getEnd()) {    // down here becuase it allows line to end to be drawn
+        if (nextPoint.equals(this.points.getEnd())) {
             System.out.println("Found end.");
             this.restart = true;
-            return;
         }
+
+        drawPoints();
+        drawPath();
 
         while (millis() - startTime < this.waitTime) {
             try {
@@ -120,12 +151,6 @@ public class Pathfinder extends PApplet {
                 e.printStackTrace();
             }
         }
-
-    }
-
-    private void reset() {
-        background(0);
-        setup();
     }
 
     private void drawPoints() {
@@ -139,14 +164,17 @@ public class Pathfinder extends PApplet {
             ellipse((float)point.getX(), (float)point.getY(), 10, 10);
         }
         fill(0, 255, 0);
-        ellipse((float)this.end.getX(), (float)this.end.getY(), 10, 10);
+
+        Point end = this.points.getEnd();
+        Point start = this.points.getStart();
+        ellipse((float)end.getX(), (float)end.getY(), 10, 10);
 
         fill(0, 0, 255);
-        ellipse((float)this.start.getX(), (float)this.start.getY(), 10, 10);
+        ellipse((float)start.getX(), (float)start.getY(), 10, 10);
     }
 
     private void drawPath() {
-        stroke(235, 180);
+        stroke(235, 150);
         strokeWeight(4);
         for (int index=1; index < this.path.size(); index++) {
             Point point1 = this.path.get(index-1);
