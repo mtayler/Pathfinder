@@ -34,31 +34,35 @@ public class GUIManager {
     private PFont font;
     public TickBox repeat;
 
+    private float fontSize;
+
     public GUIManager(PApplet parent) {
 
-        this.rectWidth = (int)((parent.width) * (9.0/10.0));
-        this.rectHeight = (int)(parent.height/10.0);
+        this.parent = parent;
 
-        double y = this.rectHeight*(2.0/10.0);
-        double x = this.rectWidth*(2.0/10.0);
+        this.rectWidth = (int)((this.parent.width) * (9.0/10.0));
+        this.rectHeight = (int)(this.parent.height/10.0);
 
-        this.font = parent.createFont("Arial", (float)Math.sqrt((y*y) + (x*x)));
+        double fontY = this.rectHeight*(2.0/10.0);
+        double fontX = this.rectWidth*(2.0/10.0);
+        this.fontSize = (float)Math.sqrt((fontY*fontY) + (fontX*fontX))/4;
+
+        this.font = this.parent.loadFont("Ubuntu-48.vlw");
+        this.parent.textFont(this.font, this.fontSize);
 
         AlgorithmType[] algorithmTypes = AlgorithmType.values();
         this.algorithms = new Algorithm[algorithmTypes.length];
-
-        this.parent = parent;
 
         this.selection = null;
 
         for (int index=0; index < algorithmTypes.length; index++) {
             this.algorithms[index] = new Algorithm(algorithmTypes[index]);
-            this.algorithms[index].topLeft[0] = ((parent.width/2) - (rectWidth/2));
+            this.algorithms[index].topLeft[0] = ((this.parent.width/2) - (rectWidth/2));
             this.algorithms[index].topLeft[1] = (index*rectHeight)+10+(int)(10*(index/1.0));
-            this.algorithms[index].bottomRight[0] = ((parent.width/2) + (rectWidth/2));
+            this.algorithms[index].bottomRight[0] = ((this.parent.width/2) + (rectWidth/2));
             this.algorithms[index].bottomRight[1] = this.algorithms[index].topLeft[1] + rectHeight;
         }
-        this.repeat = new TickBox("Repeat", this.algorithms[this.algorithms.length-1].bottomRight[1]+20, parent.width/2-100);
+        this.repeat = new TickBox("Repeat", (this.parent.width/2)-100,this.algorithms[this.algorithms.length-1].bottomRight[1]+20);
     }
 
     public AlgorithmType getSelection() {
@@ -68,11 +72,11 @@ public class GUIManager {
 
         drawGUI();
 
-        if (parent.mousePressed) {
-            int mouseX = parent.mouseX;
-            int mouseY = parent.mouseY;
+        if (this.parent.mousePressed) {
+            int mouseX = this.parent.mouseX;
+            int mouseY = this.parent.mouseY;
 
-            if (this.repeat.within(parent.mouseX, parent.mouseY)) {
+            if (this.repeat.within(this.parent.mouseX, this.parent.mouseY)) {
                 this.selection = null;
                 this.repeat.toggle();
             }
@@ -92,41 +96,43 @@ public class GUIManager {
     }
 
     private void drawGUI() {
-        parent.background(0);
+        this.parent.background(0);
 
-        parent.stroke(140);
-        parent.fill(30);
-        parent.strokeWeight(this.repeat.strokeWeight);
-        parent.rectMode(parent.CENTER);
+        this.parent.stroke(140);
+        this.parent.fill(30);
+        this.parent.strokeWeight(this.repeat.strokeWeight);
+        this.parent.rectMode(this.parent.CENTER);
 
-        parent.rect(this.repeat.position[0], this.repeat.position[1], this.repeat.size, this.repeat.size);
-        parent.textAlign(parent.LEFT);
-        parent.fill(200);
-        parent.text(this.repeat.text, this.repeat.position[0]+this.repeat.size+2, this.repeat.position[1]+this.repeat.size/2);
+        this.parent.rect(this.repeat.position[0], this.repeat.position[1], this.repeat.size, this.repeat.size);
+        this.parent.textAlign(this.parent.LEFT);
+        this.parent.fill(200);
+        this.parent.textSize(this.fontSize/(float)1.5);
+        this.parent.text(this.repeat.text, this.repeat.position[0]+this.repeat.size+2, this.repeat.position[1]+this.repeat.size/2);
 
         if (this.repeat.isTrue()) {
-            parent.line(this.repeat.position[0]-this.repeat.size/2, this.repeat.position[1]-this.repeat.size/2,
+            this.parent.line(this.repeat.position[0]-this.repeat.size/2, this.repeat.position[1]-this.repeat.size/2,
                         this.repeat.position[0]+this.repeat.size/2, this.repeat.position[1]+this.repeat.size/2);
 
-            parent.line(this.repeat.position[0]+this.repeat.size/2, this.repeat.position[1]+this.repeat.size/2,
+            this.parent.line(this.repeat.position[0]+this.repeat.size/2, this.repeat.position[1]+this.repeat.size/2,
                         this.repeat.position[0]-this.repeat.size/2, this.repeat.position[1]-this.repeat.size/2);
         }
 
-        this.parent.rectMode(parent.CORNERS);
+        this.parent.textFont(this.font,this.fontSize);
+        this.parent.rectMode(this.parent.CORNERS);
         for (int index=0; index < algorithms.length; index++) {
             Algorithm algorithm = algorithms[index];
 
-            if (algorithm.within(parent.mouseX, parent.mouseY)) {
-                parent.fill(100);
+            if (algorithm.within(this.parent.mouseX, this.parent.mouseY)) {
+                this.parent.fill(100);
             }
             else {
-                parent.fill(30);
+                this.parent.fill(30);
             }
 
-            parent.rect(algorithm.topLeft[0], algorithm.topLeft[1], algorithm.bottomRight[0], algorithm.bottomRight[1]);
-            parent.textAlign(parent.CENTER);
-            parent.fill(230);
-            parent.text(algorithm.title, (algorithm.topLeft[0]+algorithm.bottomRight[0])/2,
+            this.parent.rect(algorithm.topLeft[0], algorithm.topLeft[1], algorithm.bottomRight[0], algorithm.bottomRight[1]);
+            this.parent.textAlign(this.parent.CENTER);
+            this.parent.fill(230);
+            this.parent.text(algorithm.title, (algorithm.topLeft[0]+algorithm.bottomRight[0])/2,
                        (algorithm.topLeft[1]+algorithm.bottomRight[1])/2);
 
         }

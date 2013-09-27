@@ -45,7 +45,7 @@ public class Pathfinder extends PApplet {
 
     public void setup() {
         System.out.println("Setting up...");
-        size(500,500);
+        size(400,400);
         background(0);
 
         this.guiManager = new GUIManager(this);
