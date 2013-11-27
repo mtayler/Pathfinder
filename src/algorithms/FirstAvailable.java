@@ -25,8 +25,6 @@ import java.util.ArrayList;
 
 public class FirstAvailable extends Algorithm {
 
-    int counter;
-
     private ArrayList<Point> invalidPoints;
     private ArrayList<Point> returnedPoints;
     private int fails = 0;
