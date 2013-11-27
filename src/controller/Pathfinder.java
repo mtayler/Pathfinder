@@ -153,8 +153,6 @@ public class Pathfinder extends PApplet {
         drawPoints();
         drawPath();
 
-        System.out.println("Complete: " + completeTime);
-
 
         /* Maps how long `nextPoint` took to complete to a noticeable delay to show speed advantages
            in the algorithms
