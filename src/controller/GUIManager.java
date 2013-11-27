@@ -32,7 +32,10 @@ public class GUIManager {
     private int rectHeight;
 
     private PFont font;
+
     public TickBox repeat;
+
+    private boolean unPressed;
 
     private float fontSize;
 
@@ -63,6 +66,7 @@ public class GUIManager {
             this.algorithms[index].bottomRight[1] = this.algorithms[index].topLeft[1] + rectHeight;
         }
         this.repeat = new TickBox("Repeat", (this.parent.width/2)-100,this.algorithms[this.algorithms.length-1].bottomRight[1]+20);
+        this.unPressed = true;
     }
 
     public AlgorithmType getSelection() {
@@ -77,16 +81,22 @@ public class GUIManager {
             int mouseY = this.parent.mouseY;
 
             if (this.repeat.within(this.parent.mouseX, this.parent.mouseY)) {
-                this.selection = null;
-                this.repeat.toggle();
+                if (this.unPressed) {
+                    this.selection = null;
+                    this.repeat.toggle();
+                }
             }
 
-            for (int index=0; index < algorithms.length; index++) {
-                if (algorithms[index].within(mouseX, mouseY)) {
-                    this.selection = algorithms[index].type;
+            for (Algorithm algorithm : algorithms) {
+                if (algorithm.within(mouseX, mouseY)) {
+                    this.selection = algorithm.type;
                     return this.selection;
                 }
             }
+            this.unPressed = false;
+        }
+        else {
+            this.unPressed = true;
         }
         return null;
     }
@@ -119,9 +129,7 @@ public class GUIManager {
 
         this.parent.textFont(this.font,this.fontSize);
         this.parent.rectMode(this.parent.CORNERS);
-        for (int index=0; index < algorithms.length; index++) {
-            Algorithm algorithm = algorithms[index];
-
+        for (Algorithm algorithm : algorithms) {
             if (algorithm.within(this.parent.mouseX, this.parent.mouseY)) {
                 this.parent.fill(100);
             }

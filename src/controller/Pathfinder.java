@@ -18,6 +18,9 @@
 
 package controller;
 
+import algorithms.FirstAvailable;
+import algorithms.NextFurthest;
+import algorithms.RandomChoice;
 import processing.core.PApplet;
 
 import java.awt.*;
@@ -28,7 +31,6 @@ import static java.lang.Thread.sleep;
 
 public class Pathfinder extends PApplet {
 
-    private int waitTime;
     private boolean restart;
 
     private Point currentPoint;
@@ -58,7 +60,6 @@ public class Pathfinder extends PApplet {
 
         Points points;
 
-        this.waitTime = 100;
         this.restart = false;
 
         Point start = new Point(5,5);
@@ -96,14 +97,19 @@ public class Pathfinder extends PApplet {
             reset();
         }
 
+        /* Hack to draw GUI with Processing: Processing only draws to the screen after draw is finished
+        * Coupled with return statement below */
         if (selection == null) {
             selection = guiManager.getSelection();
 
             if (selection != null) {
                 switch (selection) {
-                    case FIRSTAVAILABLE:    pathfinder = new algorithms.FirstAvailable(points);
+                    case FIRSTAVAILABLE:    pathfinder = new FirstAvailable(points);
                         break;
-                    case NEXTCLOSEST:       pathfinder = new algorithms.NextClosest(points);
+                    case NEXTFURTHEST:      pathfinder = new NextFurthest(points);
+                        break;
+                    case RANDOMCHOICE:      pathfinder = new RandomChoice(points);
+                        break;
                 }
             }
             return;
@@ -122,9 +128,12 @@ public class Pathfinder extends PApplet {
 
         background(0);
 
-        int startTime = millis();
+        long startTime = (int)System.nanoTime();
 
         Point nextPoint = this.pathfinder.nextPoint(this.currentPoint);
+
+        long completeTime = (int)System.nanoTime() - startTime;
+
         if (nextPoint == null) {
             System.err.println("Stuck.");
             this.restart = true;
@@ -144,7 +153,15 @@ public class Pathfinder extends PApplet {
         drawPoints();
         drawPath();
 
-        while (millis() - startTime < this.waitTime) {
+        System.out.println("Complete: " + completeTime);
+
+
+        /* Maps how long `nextPoint` took to complete to a noticeable delay to show speed advantages
+           in the algorithms
+         */
+        long deltaTime = (int)map(completeTime, 10_000, 2_000_000, 100_000_000, 200_000_000);
+
+        while (System.nanoTime() - startTime < deltaTime) {
             try {
                 sleep(10);
             } catch (InterruptedException e) {

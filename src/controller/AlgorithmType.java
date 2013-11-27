@@ -26,6 +26,5 @@ package controller;
  * To change this template use File | Settings | File Templates.
  */
 public enum AlgorithmType {
-    FIRSTAVAILABLE, NEXTCLOSEST
-
+    FIRSTAVAILABLE, NEXTFURTHEST, RANDOMCHOICE
 }
