@@ -24,7 +24,7 @@ import algorithms.FirstAvailable;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class NextClosest extends Algorithm {
+public class NextFurthest extends Algorithm {
 
     ArrayList<Point> invalidPoints;
     ArrayList<Point> returnedPoints;
@@ -32,7 +32,7 @@ public class NextClosest extends Algorithm {
     int fails;
     private boolean invalidPointsCleared;
 
-    public NextClosest(Points points) {
+    public NextFurthest(Points points) {
         super(points);
 
         this.invalidPoints = new ArrayList<Point>();
