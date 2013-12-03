@@ -23,13 +23,13 @@ import controller.Points;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class FirstAvailable extends Algorithm {
+public class FirstCloser extends Algorithm {
 
     private ArrayList<Point> invalidPoints;
     private ArrayList<Point> returnedPoints;
     private int fails = 0;
 
-    public FirstAvailable(Points points) {
+    public FirstCloser(Points points) {
         super(points);
 
         this.invalidPoints = new ArrayList<Point>();

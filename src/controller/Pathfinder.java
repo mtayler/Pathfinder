@@ -18,9 +18,6 @@
 
 package controller;
 
-import algorithms.FirstAvailable;
-import algorithms.NextFurthest;
-import algorithms.RandomChoice;
 import processing.core.PApplet;
 
 import java.awt.*;
@@ -47,7 +44,7 @@ public class Pathfinder extends PApplet {
 
     public void setup() {
         System.out.println("Setting up...");
-        size(400,400);
+        size(600,600);
         background(0);
 
         this.guiManager = new GUIManager(this);
@@ -104,11 +101,13 @@ public class Pathfinder extends PApplet {
 
             if (selection != null) {
                 switch (selection) {
-                    case FIRSTAVAILABLE:    pathfinder = new FirstAvailable(points);
+                    case FIRSTCLOSER:       pathfinder = new algorithms.FirstCloser(points);
                         break;
-                    case NEXTFURTHEST:      pathfinder = new NextFurthest(points);
+                    case GREEDYNEXTCLOSEST: pathfinder = new algorithms.GreedyNextClosest(points);
                         break;
-                    case RANDOMCHOICE:      pathfinder = new RandomChoice(points);
+                    case LAZYNEXTCLOSEST:   pathfinder = new algorithms.LazyNextClosest(points);
+                        break;
+                    case RANDOMCHOICE:      pathfinder = new algorithms.RandomChoice(points);
                         break;
                 }
             }
