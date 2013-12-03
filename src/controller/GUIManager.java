@@ -65,7 +65,11 @@ public class GUIManager {
             this.algorithms[index].bottomRight[0] = ((this.parent.width/2) + (rectWidth/2));
             this.algorithms[index].bottomRight[1] = this.algorithms[index].topLeft[1] + rectHeight;
         }
-        this.repeat = new TickBox("Repeat", (this.parent.width/2)-100,this.algorithms[this.algorithms.length-1].bottomRight[1]+20);
+        this.repeat = new TickBox("Repeat",
+                (this.parent.width/2)-(this.parent.width/4), // Offsets slightly from the center (x axis)
+                this.algorithms[this.algorithms.length-1].bottomRight[1] +      // Sets position on (y axis)
+                (this.algorithms[this.algorithms.length-1].bottomRight[1] - this.algorithms[this.algorithms.length-1].topLeft[1]));
+
         this.unPressed = true;
     }
 
@@ -105,20 +109,25 @@ public class GUIManager {
         this.selection = null;
     }
 
+
+    /* Horrible, complex drawing stuff */
     private void drawGUI() {
         this.parent.background(0);
 
+        /* Settings for drawing tickbox */
         this.parent.stroke(140);
         this.parent.fill(30);
         this.parent.strokeWeight(this.repeat.strokeWeight);
         this.parent.rectMode(this.parent.CENTER);
 
+        /* Draws repeat tickbox text */
         this.parent.rect(this.repeat.position[0], this.repeat.position[1], this.repeat.size, this.repeat.size);
         this.parent.textAlign(this.parent.LEFT);
         this.parent.fill(200);
         this.parent.textSize(this.fontSize/(float)1.5);
         this.parent.text(this.repeat.text, this.repeat.position[0]+this.repeat.size+2, this.repeat.position[1]+this.repeat.size/2);
 
+        /* Draws tickbox repeat checked/unchecked symbol */
         if (this.repeat.isTrue()) {
             this.parent.line(this.repeat.position[0]-this.repeat.size/2, this.repeat.position[1]-this.repeat.size/2,
                         this.repeat.position[0]+this.repeat.size/2, this.repeat.position[1]+this.repeat.size/2);
@@ -127,6 +136,7 @@ public class GUIManager {
                         this.repeat.position[0]-this.repeat.size/2, this.repeat.position[1]-this.repeat.size/2);
         }
 
+        /* Draws each algorithm selection */
         this.parent.textFont(this.font,this.fontSize);
         this.parent.rectMode(this.parent.CORNERS);
         for (Algorithm algorithm : algorithms) {
@@ -175,7 +185,7 @@ class Algorithm {
 class TickBox {
     String text;
     int[] position;
-    int size = 10;
+    final int size = 10;
 
     boolean state;
     public float strokeWeight = 2;
