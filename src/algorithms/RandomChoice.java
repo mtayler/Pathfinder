@@ -36,7 +36,7 @@ public class RandomChoice extends Algorithm {
     private int counter;
     private Random rand;
     private ArrayList<Point> attempts;
-    private final int limit = 70;
+    private final int limit = 200;
 
     public RandomChoice(Points points) {
         super(points);
@@ -47,7 +47,7 @@ public class RandomChoice extends Algorithm {
     }
 
     public Point nextPoint(Point currentPoint) {
-        if (this.counter > 100)
+        if (this.counter > this.limit)
             return null;
 
         int index;
