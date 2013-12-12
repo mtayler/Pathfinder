@@ -24,7 +24,7 @@ import processing.core.PFont;
 public class GUIManager {
 
     private PApplet parent;
-    private Algorithm[] algorithms;
+    private Choice[] choices;
 
     private AlgorithmType selection;
 
@@ -54,21 +54,24 @@ public class GUIManager {
         this.parent.textFont(this.font, this.fontSize);
 
         AlgorithmType[] algorithmTypes = AlgorithmType.values();
-        this.algorithms = new Algorithm[algorithmTypes.length];
+        this.choices = new Choice[algorithmTypes.length];
 
         this.selection = null;
 
+        /* Creates algorithm objects to display algorithm choices */
         for (int index=0; index < algorithmTypes.length; index++) {
-            this.algorithms[index] = new Algorithm(algorithmTypes[index]);
-            this.algorithms[index].topLeft[0] = ((this.parent.width/2) - (rectWidth/2));
-            this.algorithms[index].topLeft[1] = (index*rectHeight)+10+(int)(10*(index/1.0));
-            this.algorithms[index].bottomRight[0] = ((this.parent.width/2) + (rectWidth/2));
-            this.algorithms[index].bottomRight[1] = this.algorithms[index].topLeft[1] + rectHeight;
+            this.choices[index] = new Choice(algorithmTypes[index]);
+            this.choices[index].topLeft[0] = ((this.parent.width/2) - (rectWidth/2));
+            this.choices[index].topLeft[1] = (index*rectHeight)+10+(int)(10*(index/1.0));
+            this.choices[index].bottomRight[0] = ((this.parent.width/2) + (rectWidth/2));
+            this.choices[index].bottomRight[1] = this.choices[index].topLeft[1] + rectHeight;
         }
+
+        /* Creates new tickbox for repeating selection */
         this.repeat = new TickBox("Repeat",
                 (this.parent.width/2)-(this.parent.width/4), // Offsets slightly from the center (x axis)
-                this.algorithms[this.algorithms.length-1].bottomRight[1] +      // Sets position on (y axis)
-                (this.algorithms[this.algorithms.length-1].bottomRight[1] - this.algorithms[this.algorithms.length-1].topLeft[1]));
+                this.choices[this.choices.length-1].bottomRight[1] +      // Sets position on (y axis)
+                (this.choices[this.choices.length-1].bottomRight[1] - this.choices[this.choices.length-1].topLeft[1])/2);
 
         this.unPressed = true;
     }
@@ -91,9 +94,9 @@ public class GUIManager {
                 }
             }
 
-            for (Algorithm algorithm : algorithms) {
-                if (algorithm.within(mouseX, mouseY)) {
-                    this.selection = algorithm.type;
+            for (Choice choice : choices) {
+                if (choice.within(mouseX, mouseY)) {
+                    this.selection = choice.type;
                     return this.selection;
                 }
             }
@@ -120,7 +123,7 @@ public class GUIManager {
         this.parent.strokeWeight(this.repeat.strokeWeight);
         this.parent.rectMode(this.parent.CENTER);
 
-        /* Draws repeat tickbox text */
+        /* Draws repeat tickbox */
         this.parent.rect(this.repeat.position[0], this.repeat.position[1], this.repeat.size, this.repeat.size);
         this.parent.textAlign(this.parent.LEFT);
         this.parent.fill(200);
@@ -139,25 +142,25 @@ public class GUIManager {
         /* Draws each algorithm selection */
         this.parent.textFont(this.font,this.fontSize);
         this.parent.rectMode(this.parent.CORNERS);
-        for (Algorithm algorithm : algorithms) {
-            if (algorithm.within(this.parent.mouseX, this.parent.mouseY)) {
+        for (Choice choice : choices) {
+            if (choice.within(this.parent.mouseX, this.parent.mouseY)) {
                 this.parent.fill(100);
             }
             else {
                 this.parent.fill(30);
             }
 
-            this.parent.rect(algorithm.topLeft[0], algorithm.topLeft[1], algorithm.bottomRight[0], algorithm.bottomRight[1]);
+            this.parent.rect(choice.topLeft[0], choice.topLeft[1], choice.bottomRight[0], choice.bottomRight[1]);
             this.parent.textAlign(this.parent.CENTER);
             this.parent.fill(230);
-            this.parent.text(algorithm.title, (algorithm.topLeft[0]+algorithm.bottomRight[0])/2,
-                       (algorithm.topLeft[1]+algorithm.bottomRight[1])/2);
+            this.parent.text(choice.title, (choice.topLeft[0]+ choice.bottomRight[0])/2,
+                       (choice.topLeft[1]+ choice.bottomRight[1])/2);
 
         }
     }
 }
 
-class Algorithm {
+class Choice {
     AlgorithmType type;
 
     int[] topLeft;
@@ -165,7 +168,7 @@ class Algorithm {
 
     String title;
 
-    Algorithm(AlgorithmType type) {
+    Choice(AlgorithmType type) {
         this.type = type;
         this.topLeft = new int[2];
         this.bottomRight = new int[2];

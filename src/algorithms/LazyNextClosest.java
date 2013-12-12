@@ -56,7 +56,7 @@ public class LazyNextClosest extends Algorithm {
             try {
                 bestPoint = this.path.get(this.path.size()-2);
             }
-            catch (ArrayIndexOutOfBoundsException differentPoint) {
+            catch (ArrayIndexOutOfBoundsException backtrack) {
                 return null;
             }
             for (int index=0; index < this.points.size(); index++) {

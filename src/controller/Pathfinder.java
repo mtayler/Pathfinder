@@ -18,7 +18,7 @@
 
 package controller;
 
-import processing.core.PApplet;
+import processing.core.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -41,6 +41,10 @@ public class Pathfinder extends PApplet {
 
     private GUIManager guiManager;
     private algorithms.Algorithm pathfinder;
+
+    static public void main(String args[]) {
+        PApplet.main(new String[] { "controller.Pathfinder" });
+    }
 
     public void setup() {
         System.out.println("Setting up...");
@@ -156,7 +160,7 @@ public class Pathfinder extends PApplet {
         /* Maps how long `nextPoint` took to complete to a noticeable delay to show speed advantages
            in the algorithms
          */
-        long deltaTime = (int)map(completeTime, 10_000, 2_000_000, 100_000_000, 200_000_000);
+        /* long deltaTime = (int)map(completeTime, 10_000, 2_000_000, 100_000_000, 200_000_000);
 
         while (System.nanoTime() - startTime < deltaTime) {
             try {
@@ -164,7 +168,7 @@ public class Pathfinder extends PApplet {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        } */
     }
 
     private void drawPoints() {
