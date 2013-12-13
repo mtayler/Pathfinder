@@ -65,7 +65,7 @@ public class Pathfinder extends PApplet {
 	    int maxDistance = 30;
 	    points = new Points(start, end, maxDistance);
 
-	    for (int i=0; i < (height+width)/2; i++) {
+	    for (int i=0; i < (height+width)/1.8; i++) {
 		    int x = Math.round(rand.nextInt(width) / 12) * 12;
 		    int y = Math.round(rand.nextInt(height) / 12) * 12;
 
