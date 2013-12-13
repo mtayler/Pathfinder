@@ -6,7 +6,8 @@ Pathfinding algorithms using processing to draw to screen
 Usage:
 ------
 ###Running the .jar
-Navigate to <project_root>/out/artifacts/Pathfinder_jar  Run the jar file
+1. Navigate to <project_root>/out/artifacts/Pathfinder_jar
+2. Run the jar file
 
 ###Running the source
 Download the Processing application, and add the core.jar library to the project.
