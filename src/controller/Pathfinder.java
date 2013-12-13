@@ -42,7 +42,8 @@ public class Pathfinder extends PApplet {
     private GUIManager guiManager;
     private algorithms.Algorithm pathfinder;
 
-    static public void main(String args[]) {
+
+	static public void main(String args[]) {
         PApplet.main(new String[] { "controller.Pathfinder" });
     }
 
@@ -57,35 +58,35 @@ public class Pathfinder extends PApplet {
     }
 
     public void reset() {
-        this.selection = null;
+	    Points points;
 
-        Points points;
+	    Point start = new Point(5,5);
+	    Point end = new Point(width-5, height-5);
+	    int maxDistance = 30;
+	    points = new Points(start, end, maxDistance);
+
+	    for (int i=0; i < (height+width)/2; i++) {
+		    int x = Math.round(rand.nextInt(width) / 12) * 12;
+		    int y = Math.round(rand.nextInt(height) / 12) * 12;
+
+		    if (!points.contains(x, y)) {
+			    points.addPoint(x,y);
+		    }
+		    else {
+			    i--;
+		    }
+	    }
+	    this.points = points;
+
+	    this.path = new ArrayList<Point>();
+	    this.path.clear();
+
+	    this.currentPoint = this.points.getStart();
+	    this.path.add(this.currentPoint);
+
+	    this.selection = null;
 
         this.restart = false;
-
-        Point start = new Point(5,5);
-        Point end = new Point(width-5, height-5);
-        int maxDistance = 30;
-        points = new Points(start, end, maxDistance);
-
-        this.path = new ArrayList<Point>();
-        this.path.clear();
-
-        this.currentPoint = points.getStart();
-        this.path.add(this.currentPoint);
-
-        for (int i=0; i < (height+width)/2; i++) {
-            int x = Math.round(rand.nextInt(width) / 12) * 12;
-            int y = Math.round(rand.nextInt(height) / 12) * 12;
-
-            if (!points.contains(x, y)) {
-                points.addPoint(x,y);
-            }
-            else {
-                i--;
-            }
-        }
-        this.points = points;
     }
 
 	public void draw() {
@@ -120,12 +121,12 @@ public class Pathfinder extends PApplet {
 
         if (keyPressed) {
             if (key == 'r' | key == 'R') {
-                reset();
+	            restart=true;
             }
             if (key == 's' | key == 'S') {
                 this.guiManager.repeat.set(false);
                 this.guiManager.clearSelection();
-                reset();
+                restart=true;
             }
         }
 
