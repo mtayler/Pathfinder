@@ -1,6 +1,6 @@
 /*
  * Pathfinder
- * Copyright (C) 2013  Tayler Mulligan
+ * Copyright (C) 2014  Tayler Mulligan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ package controller;
 import processing.core.*;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 import static java.lang.Thread.sleep;
@@ -36,7 +35,6 @@ public class Pathfinder extends PApplet {
 
     private Points points;
 
-    private ArrayList<Point> path;
     private Random rand = new Random();
 
     private GUIManager guiManager;
@@ -78,11 +76,7 @@ public class Pathfinder extends PApplet {
 	    }
 	    this.points = points;
 
-	    this.path = new ArrayList<Point>();
-	    this.path.clear();
-
 	    this.currentPoint = this.points.getStart();
-	    this.path.add(this.currentPoint);
 
 	    this.selection = null;
 
@@ -115,6 +109,11 @@ public class Pathfinder extends PApplet {
                     case RANDOMCHOICE:      pathfinder = new algorithms.RandomChoice(points);
                         break;
                 }
+                /* Again, hacky because of Processing
+                 * Reset screen and draw points after selection is made
+                 */
+                background(0);
+                drawPoints();
             }
             return;
         }
@@ -130,8 +129,6 @@ public class Pathfinder extends PApplet {
             }
         }
 
-        background(0);
-
         long startTime = (int)System.nanoTime();
 
         Point nextPoint = this.pathfinder.nextPoint(this.currentPoint);
@@ -143,20 +140,19 @@ public class Pathfinder extends PApplet {
             this.restart = true;
             return;
         }
+
+        // Needs to check for null value before drawing
+        drawPath(nextPoint);
+
         if (!this.points.contains(nextPoint)) {
             System.err.println("false");
         }
         this.currentPoint = nextPoint;
-        this.path.add(this.currentPoint);
 
         if (nextPoint.equals(this.points.getEnd())) {
             System.out.println("Found end.");
             this.restart = true;
         }
-
-        drawPoints();
-        drawPath();
-
 
         /* Maps how long `nextPoint` took to complete to a noticeable delay to show speed advantages
            in the algorithms
@@ -192,14 +188,10 @@ public class Pathfinder extends PApplet {
         ellipse((float)start.getX(), (float)start.getY(), 10, 10);
     }
 
-    private void drawPath() {
+    private void drawPath(Point nextPoint) {
         stroke(235, 150);
         strokeWeight(4);
-        for (int index=1; index < this.path.size(); index++) {
-            Point point1 = this.path.get(index-1);
-            Point point2 = this.path.get(index);
-
-            line((float)point1.getX(), (float)point1.getY(), (float)point2.getX(), (float)point2.getY());
-        }
+            line((float)this.currentPoint.getX(), (float)this.currentPoint.getY(),
+                    (float)nextPoint.getX(), (float)nextPoint.getY());
     }
 }
