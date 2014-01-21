@@ -129,11 +129,7 @@ public class Pathfinder extends PApplet {
             }
         }
 
-        long startTime = (int)System.nanoTime();
-
         Point nextPoint = this.pathfinder.nextPoint(this.currentPoint);
-
-        long completeTime = (int)System.nanoTime() - startTime;
 
         if (nextPoint == null) {
             System.err.println("Stuck.");
@@ -153,19 +149,6 @@ public class Pathfinder extends PApplet {
             System.out.println("Found end.");
             this.restart = true;
         }
-
-        /* Maps how long `nextPoint` took to complete to a noticeable delay to show speed advantages
-           in the algorithms
-         */
-        /* long deltaTime = (int)map(completeTime, 10_000, 2_000_000, 100_000_000, 200_000_000);
-
-        while (System.nanoTime() - startTime < deltaTime) {
-            try {
-                sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } */
     }
 
     private void drawPoints() {
