@@ -60,7 +60,7 @@ public class Pathfinder extends PApplet {
 
 	    Point start = new Point(5,5);
 	    Point end = new Point(width-5, height-5);
-	    int maxDistance = 30;
+	    final int maxDistance = 30;
 	    points = new Points(start, end, maxDistance);
 
 	    for (int i=0; i < (height+width)/1.8; i++) {
@@ -152,7 +152,7 @@ public class Pathfinder extends PApplet {
     }
 
     private void drawPoints() {
-        stroke(210);
+        stroke(80);
         strokeWeight(2);
         fill(0);
 
