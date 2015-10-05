@@ -38,7 +38,7 @@ public class FirstCloser extends Algorithm {
 
     /**
      * Returns the next available point based on given parameters.
-     * <p>
+     *
      * Returns null if there are no valid points available
      *
      * @param currentPoint  the point the path finder is currently at
@@ -68,8 +68,9 @@ public class FirstCloser extends Algorithm {
                 return possiblePoint;
             }
         }
-        if (fails > 10 && this.getDistance(this.returnedPoints.get(this.returnedPoints.size()-1), this.points.getEnd()) <= this.getDistance(currentPoint, this.points.getEnd())) {
-            return null;
+        if (fails > 10 && this.getDistance(this.returnedPoints.get(this.returnedPoints.size()-1),
+                this.points.getEnd()) <= this.getDistance(currentPoint, this.points.getEnd())) {
+                    return null;
         }
         this.invalidPoints.clear();
         return currentPoint;
