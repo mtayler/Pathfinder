@@ -1,7 +1,7 @@
 Pathfinder
 ==========
 
-Pathfinding algorithms using processing to draw to screen. Processing library available (here)[https://processing.org].
+Pathfinding algorithms using processing to draw to screen. Processing library available [here](https://processing.org).
 
 Usage:
 ------
