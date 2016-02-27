@@ -3,7 +3,7 @@ Pathfinder
 
 Pathfinding algorithms using processing to draw to screen. Processing library available [here](https://processing.org).
 
-<div style='position:relative;padding-bottom:calc(100% / 1.00)'><iframe src='https://gfycat.com/ifr/CleverLiquidApisdorsatalaboriosa' frameborder='0' scrolling='no' width='100%' height='100%' style='position:absolute;top:0;left:0;' allowfullscreen></iframe></div>
+<iframe src='https://gfycat.com/ifr/CleverLiquidApisdorsatalaboriosa' frameborder='0' scrolling='no' width='640' height='640' allowfullscreen></iframe>
 
 Usage:
 ------
